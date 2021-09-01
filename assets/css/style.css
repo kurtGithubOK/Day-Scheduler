@@ -29,6 +29,9 @@ textarea {
   text-align: center;
   border-radius: 15px;
 }
+.kurt {
+  background-color: beige;
+}
 
 .row {
   white-space: pre-wrap;
