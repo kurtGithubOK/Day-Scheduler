@@ -4,6 +4,11 @@ body {
   line-height: 1;
 }
 
+.scrollable {
+  height: 500px;
+  overflow-y: auto;
+}
+
 textarea {
   background: transparent;
   border: none;
@@ -28,9 +33,6 @@ textarea {
 .time-block {
   text-align: center;
   border-radius: 15px;
-}
-.kurt {
-  background-color: beige;
 }
 
 .row {

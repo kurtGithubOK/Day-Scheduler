@@ -9,20 +9,16 @@ $(document).ready(() => {
     // Make list of hours to display.
     makeDisplay();
 
+    // Functions for making UI elements ///////////////////////////////
     function makeDisplay() {
-        // // Get tasks from storage, later pass to makeDescriptionCol().
-        // const tasks = getTasks() || {};
-        // let num = 8;
-        // console.log('tasks:', tasks[num.toString()])
-        
         const container = $('.container');
         // loop over hours and make hourrows.
-        for(let hourIndex=0 ; hourIndex<24 ; hourIndex++) {
+        for (let hourIndex = 0; hourIndex < 24; hourIndex++) {
             // make a row.
-            const row = makeRow(hourIndex);            
+            const row = makeRow(hourIndex);
 
             // fill in time column.
-            const timeCol = makeTimeCol(hourIndex);
+            const timeCol = makeTimeColumn(hourIndex);
             timeCol.appendTo(row);
 
             // fill in description column.
@@ -32,35 +28,34 @@ $(document).ready(() => {
             descriptionCol.appendTo(row);
 
             // fill in save button.
-            const saveCol = makeSaveCol(hourIndex);
+            const saveCol = makeSaveColumn(hourIndex);
             saveCol.appendTo(row);
             row.appendTo(container)
         }
     }
-    
-    // Functions for making UI elements ///////////////////////////////
+
+    // Returns a Bootstrap row.
     function makeRow(hourIndex) {
         const row = $('<div>')
         row.addClass('row');
-        // set color coding.
-        const currentHourIndex = moment().format('H');
-        let colorCodingClass = 'past';
-        if(hourIndex === parseInt(currentHourIndex)) {
-            colorCodingClass = 'present';
-        } else if(hourIndex > parseInt(currentHourIndex)) {
-            colorCodingClass = 'future';
-        }
-        row.addClass(colorCodingClass);
         return row;
     }
-    function makeTimeCol(hourIndex) {
+
+    // Returns a Bootstrap column for hour.
+    function makeTimeColumn(hourIndex) {
         const col = makeCol();
+        col.addClass('col-2');
         col.text('hour:' + hourIndex)
         return col;
     }
+
+    // Returns a Bootstrap column for description.
     function makeDescriptionCol(hourIndex, task) {
         const col = makeCol();
         col.addClass('description');
+        col.addClass('col-8');
+        const colorCodingClass = getColorCoding(hourIndex);
+        col.addClass(colorCodingClass);
         // Make textarea for each hour.
         const textarea = $('<textarea>');
         textarea.attr('id', hourIndex);
@@ -68,8 +63,11 @@ $(document).ready(() => {
         textarea.appendTo(col);
         return col;
     }
-    function makeSaveCol(hourIndex) { // renmae +lumn?
+
+    // Returns a Bootstrap column for save button.
+    function makeSaveColumn(hourIndex) { // renmae +lumn?
         const col = makeCol();
+        col.addClass('col-2');
         // Make button
         const saveButton = $('<button>');
         saveButton.attr('id', 'saveBtn'); // Needed?
@@ -83,67 +81,50 @@ $(document).ready(() => {
         saveButton.appendTo(col);
         return col;
     }
+
+    // Returns an empty Bootstrap column as a base.
     function makeCol() {
         const col = $('<div>');
         col.addClass('col');
         return col;
     }
+
+    // Puts today's date in header (Thursday, September 29th).
     function updateHeader() {
-        // Format ex: Thursday, September 29
         const date = moment().format('dddd, MMMM Mo');
         $('#currentDay').text(date)
     }
-
-    // Event handler /////////////////////////////
-    // Save task description.
-     $('i').click( function() {
-        // figure out which one was clicked.
-        const hourIndex = $(this).data('hourIndex');
-        console.log('got to here:', hourIndex);
-
-        // get value.  // get that nth child?
-        const textareaSelector = 'textarea[id=' + hourIndex + ']';
-        const enteredText = $(textareaSelector).val();
-        // update task & save somehow?
-        console.log('you entered:', enteredText)
-        updateTasks(hourIndex, enteredText);
     
 
+    // Event handler /////////////////////////////
+    // Save button was clicked so save task.
+    $('i').click(function () {
+        // Figure out which one was clicked.
+        const hourIndex = $(this).data('hourIndex');
+
+        // Get value in textarea.
+        const textareaSelector = 'textarea[id=' + hourIndex + ']';
+        const enteredText = $(textareaSelector).val();
+        // Call func to update 'data' and save the change to local storage.
+        updateTasks(hourIndex, enteredText);
     });
 
     // Utility Functions /////////////////////////////
+    // Updates value of 'data' and saves to local storage.
     function updateTasks(hoursIndex, taskDescription) {
-        // const tasks = getTasks();
         data[hoursIndex] = taskDescription;
         localStorage.setItem('Day_Scheduler', JSON.stringify(data))
     }
-    
-    // function getTasks() {
-    //     const list = localStorage.getItem('dayScheduler');
-    //     return JSON.parse(list);
-    // }
-//     let data = {
-//         8: 'feed cat @ 9am',
-//         14: 'feed dog @ 3pm'
-//     }
 
-//    localStorage.setItem('dayScheduler', JSON.stringify(data))
-   // $('.description').click( (event) => {
-    //     // Need to handle when user clicks twice in textarea???
-    //     // change previously clicked tasks to divs, bt how???
-        
-    //     // Get value of hour-index custom data attribute.
-    //     // const myValue = this.data('hourIndex');
-    //     // console.log(myValue)
-    //     const targetAttributes = event.target.attributes;
-    //     const hourIndex = targetAttributes.getNamedItem('data-hour-index').value;
-    //     console.log('hourIndex', hourIndex)
-
-    //     // Get div with that attribute value, and its text.
-    //     const clickedDivSelector = 'div[data-hour-index=' + hourIndex + ']';
-    //     const clickedDiv = $(clickedDivSelector)
-    //     const existingText = clickedDiv.text();
-    // });
+    // Returns style name for color coding (past, present, future).
+    function getColorCoding(hourIndex) {
+        const currentHourIndex = moment().format('H');
+        if (hourIndex === parseInt(currentHourIndex)) {
+            return 'present';
+        } else if (hourIndex > parseInt(currentHourIndex)) {
+            return 'future';
+        } else return 'past';
+    }
 
 });
 
