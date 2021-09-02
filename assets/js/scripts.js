@@ -1,99 +1,134 @@
-console.log('hilloooooo')
 
 $(document).ready(() => {
+    updateHeader();
+
     makeDisplay();
 
     function makeDisplay() {
+        // Get tasks from storage, later pass to makeDescriptionCol().
+        const tasks = getTasks();
+        let num = 8;
+        console.log('tasks:', tasks[num.toString()])
+        
         const container = $('.container');
         // loop over hours and make hourrows.
-        for(let i=0 ; i<24 ; i++) {
-            console.log('xxxx:', container)
+        for(let hourIndex=0 ; hourIndex<24 ; hourIndex++) {
             // make a row.
             const row = makeRow();            
+
             // fill in time column.
-            const timeCol = makeTimeCol();
+            const timeCol = makeTimeCol(hourIndex);
             timeCol.appendTo(row);
-            // Get tasks from storage, pass to makeDescCol():  [{time: xxx, desc: desc}]
-            const tasks = getTasks();
+
             // fill in description column.
-            const descriptionCol = makeDescriptionCol();
+            console.log('tasks:', tasks[hourIndex.toString()])
+            const taskDescription = tasks[hourIndex.toString()];
+            const descriptionCol = makeDescriptionCol(hourIndex, taskDescription);
             descriptionCol.appendTo(row);
+
             // fill in save button.
-            const saveCol = makeSaveCol();
+            const saveCol = makeSaveCol(hourIndex);
             saveCol.appendTo(row);
             row.appendTo(container)
         }
     }
     
+    // UI Makers ///////////////////////////////
     function makeRow() {
         const row = $('<div>')
         row.addClass('row');
-//        row.text('ima row')
         // set color coding.
         return row;
     }
-    function makeTimeCol() {
-        const col = $('<div>')
-        col.addClass('col');
-        col.text('time goes here')
+    function makeTimeCol(hourIndex) {
+        const col = makeCol();
+        col.text('hour:' + hourIndex)
         return col;
     }
-    function makeDescriptionCol() {
-        const col = $('<div>')
-        col.addClass('col');
-        col.text('desc pls ...')
+    function makeDescriptionCol(hourIndex, task) {
+        const col = makeCol();
+        col.addClass('description');
+        // Make textarea for each hour.
+        const textarea = $('<textarea>');
+        textarea.attr('id', hourIndex);
+        textarea.text(task);
+        textarea.appendTo(col);
         return col;
     }
-    function makeSaveCol() {
-        const col = $('<div>')
-        col.addClass('col');
-        col.text('save!')
+    function makeSaveCol(hourIndex) {
+        const col = makeCol();
+        const saveButton = $('<button>');
+        saveButton.attr('id', 'saveBtn'); // Needed?
+        saveButton.addClass('saveBtn');
+
+        // Add icon
+        const icon = $('<i data-hour-index=' + hourIndex + '>'); // improve this.
+        icon.text('save me!');
+        icon.appendTo(saveButton);
+
+        saveButton.appendTo(col);
         return col;
+    }
+    function makeCol() {
+        const col = $('<div>');
+        col.addClass('col');
+        return col;
+    }
+    function updateHeader() {
+        // Format ex: Thursday, September 29
+        const date = moment().format('dddd, MMMM Mo');
+        $('#currentDay').text(date)
     }
 
-
-    // Event handlers.
-    function taskClicked() {
-        console.log('task clicked!')
-        // Use listener delegation.
-        // change div text to text area.
-        changeDivToTextarea();
-        // change back when click elsewhere?
-        // that's it?
-    }
-    function saveClicked(event) {
-        console.log('save clicked!')
+    // Event handlers /////////////////////////////
+     $('i').click( function() {
         // figure out which one was clicked.
-        const timeslot = getTimeslot(event);
-        // get value.  // get that nth child?
+        const hourIndex = $(this).data('hourIndex');
+        console.log('got to here:', hourIndex);
 
+        // get value.  // get that nth child?
+        const textareaSelector = 'textarea[id=' + hourIndex + ']';
+        const enteredText = $(textareaSelector).val();
         // update task & save somehow?
-        
-        // change element to div
-        changeTextareaToDiv();
-    }
-    // Utils
+        updateTasks(hourIndex, enteredText);
+        console.log('you entered:', enteredText)
+    
+
+    });
+
+    // Utilities /////////////////////////////
     function getTasks() {
         const list = localStorage.getItem('dayScheduler');
         return JSON.parse(list);
     }
-    function changeDivToTextarea() {
-    }
-    function changeTextareaToDiv() {
-    }
-    function getTimeslot() {
+    function updateTasks(hoursIndex, taskDescription) {
+        const tasks = getTasks();
+        tasks[hoursIndex] = taskDescription;
+        localStorage.setItem('dayScheduler', JSON.stringify(tasks))
     }
 
-    let data = [
-        {
-            date: '2021-8-21T09:00:00',
-            description: 'feed cat'
-        },
-        {
-            date: '2021-8-21T10:00:00',
-            description: 'feed dog'
-        },
-    ];
+    let data = {
+        8: 'feed cat @ 9am',
+        14: 'feed dog @ 3pm'
+    }
+
+   localStorage.setItem('dayScheduler', JSON.stringify(data))
+   // $('.description').click( (event) => {
+    //     // Need to handle when user clicks twice in textarea???
+    //     // change previously clicked tasks to divs, bt how???
+        
+    //     // Get value of hour-index custom data attribute.
+    //     // const myValue = this.data('hourIndex');
+    //     // console.log(myValue)
+    //     const targetAttributes = event.target.attributes;
+    //     const hourIndex = targetAttributes.getNamedItem('data-hour-index').value;
+    //     console.log('hourIndex', hourIndex)
+
+    //     // Get div with that attribute value, and its text.
+    //     const clickedDivSelector = 'div[data-hour-index=' + hourIndex + ']';
+    //     const clickedDiv = $(clickedDivSelector)
+    //     const existingText = clickedDiv.text();
+    // });
 
 });
 
