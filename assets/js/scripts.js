@@ -1,7 +1,7 @@
 
 $(document).ready(() => {
     // Data for app.  Gets saved to local storage when save is clicked.
-    data = {};
+    data = JSON.parse(localStorage.getItem('Day_Scheduler')) || {};
 
     // Put time in header.
     updateHeader();
@@ -38,12 +38,19 @@ $(document).ready(() => {
         }
     }
     
-    // UI Makers ///////////////////////////////
+    // Functions for making UI elements ///////////////////////////////
     function makeRow(hourIndex) {
         const row = $('<div>')
         row.addClass('row');
         // set color coding.
-        if()
+        const currentHourIndex = moment().format('H');
+        let colorCodingClass = 'past';
+        if(hourIndex === parseInt(currentHourIndex)) {
+            colorCodingClass = 'present';
+        } else if(hourIndex > parseInt(currentHourIndex)) {
+            colorCodingClass = 'future';
+        }
+        row.addClass(colorCodingClass);
         return row;
     }
     function makeTimeCol(hourIndex) {
@@ -104,11 +111,11 @@ $(document).ready(() => {
 
     });
 
-    // Utilities /////////////////////////////
+    // Utility Functions /////////////////////////////
     function updateTasks(hoursIndex, taskDescription) {
         // const tasks = getTasks();
         data[hoursIndex] = taskDescription;
-        localStorage.setItem('dayScheduler', JSON.stringify(data))
+        localStorage.setItem('Day_Scheduler', JSON.stringify(data))
     }
     
     // function getTasks() {
