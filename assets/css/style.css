@@ -1,7 +1,7 @@
 body {
   font-family: 'Open Sans', sans-serif;
   font-size: 16px;
-  line-height: 1;
+  line-height: 1.5;
 }
 
 .scrollable {
@@ -73,4 +73,10 @@ textarea {
 .saveBtn i:hover {
   font-size: 20px;
   transition: all 0.3s ease-in-out;
+}
+
+/* Font Awesome save icon. */
+.far {
+  font-size: 4em;
+  color: lightblue;
 }

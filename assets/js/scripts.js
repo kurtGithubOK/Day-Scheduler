@@ -22,7 +22,6 @@ $(document).ready(() => {
             timeCol.appendTo(row);
 
             // fill in description column.
-            console.log('data passed to cols:', data[hourIndex.toString()])
             const taskDescription = data[hourIndex.toString()];
             const descriptionCol = makeDescriptionCol(hourIndex, taskDescription);
             descriptionCol.appendTo(row);
@@ -38,6 +37,8 @@ $(document).ready(() => {
     function makeRow(hourIndex) {
         const row = $('<div>')
         row.addClass('row');
+        row.addClass('align-items-center');
+
         return row;
     }
 
@@ -45,7 +46,13 @@ $(document).ready(() => {
     function makeTimeColumn(hourIndex) {
         const col = makeCol();
         col.addClass('col-2');
-        col.text('hour:' + hourIndex)
+        col.addClass('text-end');
+        col.attr('text-align', 'right');
+
+        // Display hour by making todays date and hourIndex time.
+        const hour = moment().hour(hourIndex);
+        const hourFormatted = hour.format('h A');
+        col.text(hourFormatted)
         return col;
     }
 
@@ -73,9 +80,8 @@ $(document).ready(() => {
         saveButton.attr('id', 'saveBtn'); // Needed?
         saveButton.addClass('saveBtn');
 
-        // Add icon to button
-        const icon = $('<i data-hour-index=' + hourIndex + '>'); // improve this.
-        icon.text('save me!');
+        // Add icon to button // <i class="far fa-save">
+        const icon = $('<i class="far fa-save" data-hour-index=' + hourIndex + '>'); // improve this.
         icon.appendTo(saveButton);
 
         saveButton.appendTo(col);
@@ -94,7 +100,7 @@ $(document).ready(() => {
         const date = moment().format('dddd, MMMM Mo');
         $('#currentDay').text(date)
     }
-    
+
 
     // Event handler /////////////////////////////
     // Save button was clicked so save task.
