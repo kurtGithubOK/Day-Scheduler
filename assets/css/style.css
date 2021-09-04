@@ -4,9 +4,13 @@ body {
   line-height: 1.5;
 }
 
-.scrollable {
-  height: 500px;
-  overflow-y: auto;
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+  color: black;
+  border-radius: 0;
+  border-bottom: 10px solid black;
+  padding-bottom: 0%;
 }
 
 textarea {
@@ -14,24 +18,16 @@ textarea {
   border: none;
   resize: none;
   color: #000000;
-  border-left: 1px solid black;
   padding: 10px;
-}
-
-.jumbotron {
-  text-align: center;
-  background-color: transparent;
-  color: black;
-  border-radius: 0;
-  border-bottom: 10px solid black;
-}
+  width: 100%;
+}  
 
 .description {
   white-space: pre-wrap;
 }
 
 .time-block {
-  text-align: center;
+  text-align: right;
   border-radius: 15px;
 }
 
@@ -44,7 +40,8 @@ textarea {
 .hour {
   background-color: #ffffff;
   color: #000000;
-  border-top: 1px dashed #000000;
+  border-top: 1px solid #000000;
+  text-align: right;
 }
 
 .past {
@@ -68,10 +65,11 @@ textarea {
   border-bottom-right-radius: 15px;
   background-color: #06aed5;
   color: white;
+  font-size: 18px;
 }
 
 .saveBtn i:hover {
-  font-size: 20px;
+  font-size: 80px;
   transition: all 0.3s ease-in-out;
 }
 

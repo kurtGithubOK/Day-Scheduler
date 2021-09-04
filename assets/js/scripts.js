@@ -13,7 +13,7 @@ $(document).ready(() => {
     function makeDisplay() {
         const container = $('.container');
         // loop over hours and make hourrows.
-        for (let hourIndex = 0; hourIndex < 24; hourIndex++) {
+        for (let hourIndex = 8; hourIndex < 18; hourIndex++) {
             // make a row.
             const row = makeRow(hourIndex);
 
@@ -37,8 +37,6 @@ $(document).ready(() => {
     function makeRow(hourIndex) {
         const row = $('<div>')
         row.addClass('row');
-        row.addClass('align-items-center');
-
         return row;
     }
 
@@ -46,8 +44,7 @@ $(document).ready(() => {
     function makeTimeColumn(hourIndex) {
         const col = makeCol();
         col.addClass('col-2');
-        col.addClass('text-end');
-        col.attr('text-align', 'right');
+        col.addClass('hour');
 
         // Display hour by making todays date and hourIndex time.
         const hour = moment().hour(hourIndex);
@@ -63,6 +60,7 @@ $(document).ready(() => {
         col.addClass('col-8');
         const colorCodingClass = getColorCoding(hourIndex);
         col.addClass(colorCodingClass);
+        col.attr('padding-left', '50%');
         // Make textarea for each hour.
         const textarea = $('<textarea>');
         textarea.attr('id', hourIndex);
@@ -75,13 +73,17 @@ $(document).ready(() => {
     function makeSaveColumn(hourIndex) { // renmae +lumn?
         const col = makeCol();
         col.addClass('col-2');
+        col.css({'padding-left': '0%'});
         // Make button
         const saveButton = $('<button>');
         saveButton.attr('id', 'saveBtn'); // Needed?
         saveButton.addClass('saveBtn');
 
         // Add icon to button // <i class="far fa-save">
-        const icon = $('<i class="far fa-save" data-hour-index=' + hourIndex + '>'); // improve this.
+        const icon = $('<i>');
+        icon.addClass('far');
+        icon.addClass('fa-save');
+        icon.attr('data-hour-index', hourIndex);
         icon.appendTo(saveButton);
 
         saveButton.appendTo(col);
