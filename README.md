@@ -13,7 +13,7 @@
 
 ![Screenshot of Password Generator](./readmeImages/screenshot.png)
 
-## The deployed app is here:  https://kurtgithubok.github.io/Coding-Quiz/
+## The deployed app is here:  https://kurtgithubok.github.io/Day-Scheduler/
 
 ## Implemented using Bootstrap, JQuery, and MomentJS.
 
